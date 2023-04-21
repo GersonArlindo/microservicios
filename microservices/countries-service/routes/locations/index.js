@@ -35,10 +35,10 @@ router.get("/country/:capital", (req, res) => {
 
   if (result) {
     const countryName = countries[result].name;
-
+    console.log(countryName)
     // Solicitamos los autores y los libros escritos en el país
-    const authorUrl = `http://localhost:3000/api/v2/authors/authors/${countryName}`;
-    const bookUrl = `http://localhost:4000/api/v2/books/books/${countryName}`;
+    const authorUrl = `http://nginx:8080/api/v2/authors/authors/${countryName}`;
+    const bookUrl = `http://nginx:8080/api/v2/books/books/${countryName}`;
 
     // Enviamos solicitudes GET a ambas URLs
     const authorRequest = http.get(authorUrl, (authorResponse) => {

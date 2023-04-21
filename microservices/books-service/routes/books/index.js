@@ -42,7 +42,7 @@ router.get("/author/:authorId", (req, res) => {
   let authorId = req.params.authorId;
 
   if (isNaN(parseInt(authorId))) {
-    http.get(`http://localhost:3000/api/v2/authors/author/${authorId}`, (response) => {
+    http.get(`http://nginx:8080/api/v2/authors/author/${authorId}`, (response) => {
       let responseData = '';
       response.on('data', (chunk) => {
         responseData += chunk;

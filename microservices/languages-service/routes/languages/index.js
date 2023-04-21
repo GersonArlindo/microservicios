@@ -85,13 +85,13 @@ async function getData() {
       const languageData = data.find((languageData) => languageData.lenguaje.toLowerCase() === language.toLowerCase());
       if (!languageData) {
         // Si no se encuentra el código ni el lenguaje, retornamos un mensaje de error
-        return res.status(404).send("Lenguaje o código NO encontrado, FAVOR INGRESE UN COD O LENGUAGE VALIDO");
+        return res.status(404).send("Lenguaje o código NO encontrado, FAVOR INGRESE UN COD O LENGUAJE VALIDO");
       }
       code = languageData.codigo;
     }
   
     // Hacemos la petición a la API de países
-    const response = await fetch(`http://localhost:5000/api/v2/countries/language/${code}`);
+    const response = await fetch(`http://nginx:8080/api/v2/countries/language/${code}`);
 
     const countries = await response.json();
     const dataArray = Object.values(countries.data); //------>NUEVO y todo el for
@@ -109,11 +109,11 @@ async function getData() {
         // Para cada país, hacemos las peticiones a los endpoints de autores y libros
         for (const country of dataArray) {
           // Hacemos la petición a la API de autores
-          const authorsResponse = await fetch(`http://localhost:3000/api/v2/authors/authors/${country}`);
+          const authorsResponse = await fetch(`http://nginx:8080/api/v2/authors/authors/${country}`);
           const authors = await authorsResponse.json();
                
           // Hacemos la petición a la API de libros
-          const booksResponse = await fetch(`http://localhost:4000/api/v2/books/books/${country}`);
+          const booksResponse = await fetch(`http://nginx:8080/api/v2/books/books/${country}`);
           const books = await booksResponse.json();
 
           // Agregamos los datos de autores y libros al objeto de respuesta
@@ -124,63 +124,6 @@ async function getData() {
         // Enviamos la respuesta al cliente
         return res.send(responseObj);
   });
-
-
-
-
-  // router.get("/search/:codeOrLanguage", async (req, res) => {
-  //   const codeOrLanguage = req.params.codeOrLanguage;
-  
-  //   // Buscamos si el parámetro es un código
-  //   let code = codeOrLanguage;
-  //   let language = null;
-  //   const languageData = data.find((languageData) => languageData.codigo === code);
-  //   if (!languageData) {
-  //     // Si no es un código, buscamos el código correspondiente al lenguaje
-  //     language = codeOrLanguage;
-  //     const languageData = data.find((languageData) => languageData.lenguaje.toLowerCase() === language.toLowerCase());
-  //     if (!languageData) {
-  //       // Si no se encuentra el código ni el lenguaje, retornamos un mensaje de error
-  //       return res.status(404).send("Lenguaje o código no encontrado");
-  //     }
-  //     code = languageData.codigo;
-  //   }
-  
-  //   // Hacemos la petición a la API de países
-  //   const response = await fetch(`http://localhost:5000/api/v2/countries/language/${code}`);
-  //   const countries = await response.json()|| [];
-  
-  //   // Creamos un objeto de respuesta con los datos de los países
-  //   const responseObj = {
-  //     service: "countries",
-  //     architecture: "microservices",
-  //     length: countries.length,
-  //     data: [],
-  //   };
-  
-  //   // Para cada país, hacemos las peticiones a los endpoints de autores y libros
-  //   for (const country of countries) {
-  //     const countryName = country.name;
-  
-  //     // Hacemos la petición a la API de autores
-  //     const authorsResponse = await fetch(`http://localhost:3000/api/v2/authors/authors/${countryName}`);
-  //     const authors = await authorsResponse.json();
-  
-  //     // Hacemos la petición a la API de libros
-  //     const booksResponse = await fetch(`http://localhost:4000/api/v2/books/books/${countryName}`);
-  //     const books = await booksResponse.json();
-  
-  //     // Agregamos los datos de autores y libros al objeto de respuesta
-  //     responseObj.data.push({
-  //       country: countryName,
-  //       authors: authors,
-  //       books: books,
-  //     });
-  //   }
-  
-  //   // Enviamos la respuesta al cliente
-  //   return res.send(responseObj);
-  // });
 }
 
 getData().catch((error) => console.error(error));
